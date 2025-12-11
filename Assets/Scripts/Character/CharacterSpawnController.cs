@@ -8,24 +8,28 @@ public class CharacterSpawnController : MonoBehaviour
     [SerializeField] private Transform playerTransform; // Ссылка на игрока
     [SerializeField] private float spawnRadius = 10f; // Радиус спавна
     [SerializeField] private float spawnInterval = 1f; // Интервал спавна (сек)
-    
+
     [Header("Difficulty Settings")]
     [SerializeField] private int initialMaxEnemies = 5; // Стартовый лимит
     [SerializeField] private int enemiesAddedPerMinute = 2; // Прирост сложности
-
+    
     // Внутренние переменные
     private float matchTimer;
     private float spawnTimer;
     private int currentMaxEnemies;
+    private List<GameObject> activeEnemies = new List<GameObject>();
     private bool isGameActive = true;
 
-    private List<GameObject> activeEnemies = new List<GameObject>();
+    // Ссылка на данные для врагов, которые будем спавнить
+    private CharacterData enemyDataConfig; 
 
     private void Start()
     {
         currentMaxEnemies = initialMaxEnemies;
         
-        // Автоматический поиск игрока, если забыл указать в инспекторе
+        // Создаем конфигурацию для врагов один раз (или можно вынести в настройки)
+        enemyDataConfig = new CharacterData(3.5f, 1, "Враг");
+
         if (playerTransform == null)
         {
             GameObject player = GameObject.FindGameObjectWithTag("Player");
@@ -58,14 +62,13 @@ public class CharacterSpawnController : MonoBehaviour
 
     private void HandleSpawning()
     {
-        if (spawnTimer >= spawnInterval && activeEnemies.Count < currentMaxEnemies)
+        if (spawnTimer > spawnInterval && activeEnemies.Count < currentMaxEnemies)
         {
             SpawnEnemy();
-            spawnTimer = 0f;
+            spawnTimer = 0;
         }
     }
 
-    // === ГЛАВНОЕ ИЗМЕНЕНИЕ ЗДЕСЬ ===
     private void SpawnEnemy()
     {
         // 1. Выбираем случайную точку вокруг игрока
@@ -74,25 +77,26 @@ public class CharacterSpawnController : MonoBehaviour
 
         // 2. Создаем врага
         GameObject newEnemy = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
-
-        // 3. Находим на новом враге скрипт EnemyAI и говорим ему, кто цель
-        var enemyScript = newEnemy.GetComponent<EnemyAI>(); 
+        
+        // 3. Инициализируем врага
+        var enemyScript = newEnemy.GetComponent<EnemyAI>();
         if (enemyScript != null)
         {
-            enemyScript.target = playerTransform; // Передаем игрока как цель
+            // Важно: Мы передаем данные и вызываем Initialize, передавая самого врага
+            enemyScript.SetData(enemyDataConfig); 
+            enemyScript.Initialize(enemyScript);
         }
 
         // 4. Добавляем в список
         activeEnemies.Add(newEnemy);
     }
-    // ===============================
 
     private void CleanupDeadEnemies()
     {
         // Удаляем из списка пустые ссылки (убитых врагов)
         activeEnemies.RemoveAll(item => item == null);
     }
-    
+
     public void StopSpawning()
     {
         isGameActive = false;

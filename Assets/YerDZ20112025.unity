@@ -136,9 +136,10 @@ GameObject:
   - component: {fileID: 37944730}
   - component: {fileID: 37944732}
   - component: {fileID: 37944733}
+  - component: {fileID: 37944734}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -171,7 +172,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc45cf2e5fc28d54290a10efcf9ce50e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 5
 --- !u!143 &37944730
 CharacterController:
   m_ObjectHideFlags: 0
@@ -210,7 +210,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc45cf2e5fc28d54290a10efcf9ce50e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 5
 --- !u!114 &37944732
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -268,6 +267,18 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &37944734
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 37944727}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2cc5da76a2d709244bad13459cfca9d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &198318235
 GameObject:
   m_ObjectHideFlags: 0
@@ -464,6 +475,7 @@ GameObject:
   m_Component:
   - component: {fileID: 861812819}
   - component: {fileID: 861812818}
+  - component: {fileID: 861812820}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -497,13 +509,30 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 861812817}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 5.2415776, y: 0.12519194, z: 683.9311}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &861812820
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 861812817}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb547a953fe12f54c94f84412d89bc74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerCharacter: {fileID: 37944734}
+  playerSpeed: 5
+  playerHealth: 3
+  enemySpeed: 3.5
+  enemyHealth: 1
 --- !u!1 &1820516684
 GameObject:
   m_ObjectHideFlags: 0

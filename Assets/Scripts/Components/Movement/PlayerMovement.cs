@@ -1,57 +1,33 @@
 using UnityEngine;
 
-// Реализуем IInputReader
 public class PlayerMovement : MonoBehaviour, IInputReader
 {
     private CharacterController characterController;
-    public float moveSpeed = 5f;
+    private Character character; 
     
-    // --- Реализация IInputReader ---
-    // Публичное свойство для получения вектора движения
     public Vector3 MoveDirection { get; private set; }
 
-    // Метод для инициализации ввода (требуется интерфейсом, пока не используется)
     public void Initialize(Character character)
     {
-        // Здесь можно было бы настроить, какой Character управляет этим вводом.
-        // Но для базового движения игрока это остается пустым.
-    }
-    // --- Конец реализации IInputReader ---
-
-
-    void Start()
-    {
+        this.character = character;
         characterController = GetComponent<CharacterController>();
+        
         if (characterController == null)
-        {
-            Debug.LogError("PlayerMovement требует компонент CharacterController на объекте Player!");
-        }
+            Debug.LogError("Нет CharacterController!");
     }
 
-    void Update()
+    private void Update()
     {
-        // 1. Считываем ввод с клавиатуры
-        float horizontalInput = Input.GetAxis("Horizontal");
-        float verticalInput = Input.GetAxis("Vertical");
+        float h = Input.GetAxis("Horizontal");
+        float v = Input.GetAxis("Vertical");
 
-        // Создаем вектор движения на основе ввода
-        Vector3 rawMoveDirection = new Vector3(horizontalInput, 0f, verticalInput);
-        
-        // 2. Нормализуем и сохраняем в свойство MoveDirection
-        if (rawMoveDirection.magnitude > 1)
-        {
-            // Используем .normalized, чтобы движение по диагонали не было быстрее
-            MoveDirection = rawMoveDirection.normalized;
-        }
-        else
-        {
-            MoveDirection = rawMoveDirection;
-        }
+        Vector3 raw = new Vector3(h, 0f, v);
+        MoveDirection = raw.magnitude > 1 ? raw.normalized : raw;
 
-        // 3. Перемещаем персонажа
-        if (characterController != null)
+        if (character != null && characterController != null)
         {
-            characterController.Move(MoveDirection * moveSpeed * Time.deltaTime);
+            characterController.Move(MoveDirection * character.Data.MovementSpeed * Time.deltaTime);
+            if (MoveDirection != Vector3.zero) transform.forward = MoveDirection;
         }
     }
 }

@@ -1,34 +1,22 @@
 using UnityEngine;
 
-public class PlayerCharacter : Character 
+public class PlayerCharacter : Character
 {
-    // Используем Awake, чтобы инициализация произошла до первого Start()
-    void Awake()
+    public override void Initialize(Character character)
     {
-        // 1. Создание данных (установка начальных значений для игрока)
-        CharacterData playerData = new CharacterData(
-            speed: 5f, 
-            health: 3, 
-            name: "Игрок"
-        );
+        base.Initialize(character);
 
-        // 2. Поиск компонента ввода (PlayerMovement)
-        IInputReader playerInput = GetComponent<PlayerMovement>();
-        
-        // 3. Вызов Initialize родителя
-        if (playerInput != null)
+        // Ищем компонент с правильным именем интерфейса - IInputReader
+        var inputReader = GetComponent<IInputReader>();
+
+        if (inputReader != null)
         {
-            Initialize(playerData, playerInput);
+            inputReader.Initialize(character);
+            Debug.Log($"Игрок {character.Data.CharacterName} готов.");
         }
         else
         {
-            Debug.LogError("Ошибка: PlayerCharacter требует компонент PlayerMovement (IInputReader)!");
+            Debug.LogError("Ошибка: Не найден компонент IInputReader!");
         }
-    }
-    
-    // Переопределяем Initialize, чтобы соответствовать сигнатуре родителя, хотя вызываем его сами.
-    public override void Initialize(CharacterData data, IInputReader inputReader)
-    {
-        base.Initialize(data, inputReader);
     }
 }

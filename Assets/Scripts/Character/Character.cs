@@ -1,29 +1,18 @@
 using UnityEngine;
 
-// Класс Character должен быть абстрактным, так как он является базовым
 public abstract class Character : MonoBehaviour
 {
-    // Приватное поле для хранения данных
-    private CharacterData characterData; 
-    
-    // Публичное свойство Data, доступное только для чтения (get)
-    // Реализует требование инкапсуляции.
-    public CharacterData Data => characterData; 
-    
-    // Свойство для хранения компонента ввода
-    protected IInputReader InputReader { get; private set; }
+    // Свойство для доступа к данным
+    public CharacterData Data { get; protected set; }
 
-    // --- Измененный метод Initialize ---
-    // Метод теперь принимает CharacterData и IInputReader. Помечен как virtual.
-    public virtual void Initialize(CharacterData data, IInputReader inputReader)
+    public void SetData(CharacterData data)
     {
-        characterData = data;
-        InputReader = inputReader;
+        Data = data;
+    }
+
+    // ВАЖНО: Метод должен принимать (Character character), а не два аргумента!
+    public virtual void Initialize(Character character)
+    {
         
-        // Инициализируем компонент ввода, передавая ему ссылку на Character
-        if (InputReader != null)
-        {
-            InputReader.Initialize(this); 
-        }
     }
 }

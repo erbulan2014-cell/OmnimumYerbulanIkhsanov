@@ -1,20 +1,19 @@
 using UnityEngine;
-using System; // Для атрибута [Serializable]
+using System;
 
-// [Serializable] позволяет нам видеть и настраивать этот класс в Inspector
 [Serializable]
 public class CharacterData
 {
-    // Поля для хранения данных персонажа
-    public float movementSpeed = 5f;
-    public int maxHealth = 1;
-    public string characterName = "BaseCharacter";
+    // Свойства доступны для чтения извне, но менять их может только этот класс
+    [field: SerializeField] public float MovementSpeed { get; private set; }
+    [field: SerializeField] public int MaxHealth { get; private set; }
+    [field: SerializeField] public string CharacterName { get; private set; }
 
-    // Конструктор для удобной инициализации
+    // Конструктор для инициализации
     public CharacterData(float speed, int health, string name)
     {
-        movementSpeed = speed;
-        maxHealth = health;
-        characterName = name;
+        MovementSpeed = speed;
+        MaxHealth = health;
+        CharacterName = name;
     }
 }
